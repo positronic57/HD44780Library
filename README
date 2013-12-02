@@ -1,0 +1,9 @@
+AVR-libc library for a LCD with HD44780 display controller for AVR 8-bit microcontrollers.
+The library implements 4-bit bus for communication with the LCD.
+Config.h header is used to define the microcontroller PINs for the LCD bus.
+Tested on Atmel Atmega32 microcontroller.
+
+WARNING: 
+The source is provided as it is without any warranty. Use it on your own risk!
+The author does not take any responsibility for the damage caused while using this software.
+

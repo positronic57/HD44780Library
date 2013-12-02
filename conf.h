@@ -1,0 +1,4 @@
+#define HD44780_CMD_PORT D
+#define	HD44780_RS PORT0
+#define	HD44780_E PORT1
+#define HD44780_DATA_PORT B
