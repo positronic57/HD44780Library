@@ -1,9 +1,65 @@
-AVR-libc library for a LCD with HD44780 display controller for AVR 8-bit microcontrollers.
-The library implements 4-bit bus for communication with the LCD.
-Config.h header is used to define the microcontroller PINs for the LCD bus.
-Tested on Atmel Atmega32 microcontroller.
+Short Describtion
+
+HD44780library is C library for LCD with HD44780 display controller for AVR 8-bit microcontrollers.
+The library implements 4-bit bus for communication with the HD44780 LCD controller.
+
+Supported MCU Hardware
+
+The library is compatible with every 8-bit AVR microcontroller.
+
+
+Library Description
+
+HD44780 is represented by a structure defined as:
+
+typedef struct SHD44780
+{
+	volatile uint8_t *HD44780_CMD_PORT;	//AVR Port used for the command bus of HD44780 LCD driver
+	volatile uint8_t *HD44780_DATA_PORT;	//AVR Port used for the data bus of HD44780 LCD driver
+	uint8_t HD44780_RS;			//Defines the RS control pin from the CMD_PORT
+	uint8_t HD44780_E;			//Defines the E control pin from the CMD_PORT
+} TSHD44780;
+
+
+The following functions are included in the library:
+
+ - void LCDInit4(TSHD44780 *pHD44780,volatile uint8_t *HD44780_CMD_PORT,volatile uint8_t *HD44780_DATA_PORT,uint8_t HD44780_RS,uint8_t HD44780_E);
+	The function is used to assign AVR ports/pins to the HD44780 bus and initilaze the HD44780 driver.
+
+ - void LCDSendCommand4(TSHD44780 *pHD44780,uint8_t Command2Send);
+	Send a command to HD44780;
+
+ - void LCDShowCharacter4(TSHD44780 *pHD44780,char Character2Show);
+	Send a character to HD44780;
+
+ - void LCDShowString4(TSHD44780 *pHD44780,char *String2Show);
+	Send a character to HD44780;
+ - void LCDSetCursorPosition4(TSHD44780 *pHD44780,uint8_t raw, uint8_t column);
+	Set cursor position on the LCD. 
+
+
+Usage
+
+Operating HD44780 LCD controller in 4-bit data bus requires 6 PINs from the microcontroller:
+- 4 data pins;
+- 2 command/control PINs.
+
+Both ports must be specified in the init function. For the PORT that will be selected for the DATA bus,
+the library assumes that the lower nibble from the PORT is reserved for communication with HD44780
+and the higher nibble can be used for other purposes.
+
+For example:
+
+LCDInit4(pHD44780Display,&PORTD,&PORTB,PD4,PD7);
+
+defines PORTD as command port with PD4 and PD7 as control pins; PORTB as data port where PD0-3 will be used by the library.
+Those data PINs must be attached to the data pins of HD44780 as described in the data sheet.
+
+See example section of the library for further details how to use the functions provided by the library.
+
 
 WARNING: 
 The source is provided as it is without any warranty. Use it on your own risk!
 The author does not take any responsibility for the damage caused while using this software.
 
+Tested on Atmel Atmega32 microcontroller.
