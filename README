@@ -33,8 +33,9 @@ The following functions are included in the library:
 	Send a character to HD44780;
 
  - void LCDShowString4(TSHD44780 *pHD44780,char *String2Show);
-	Send a character to HD44780;
- - void LCDSetCursorPosition4(TSHD44780 *pHD44780,uint8_t raw, uint8_t column);
+	Send a string to HD44780;
+ 
+- void LCDSetCursorPosition4(TSHD44780 *pHD44780,uint8_t raw, uint8_t column);
 	Set cursor position on the LCD. 
 
 
