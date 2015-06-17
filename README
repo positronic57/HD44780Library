@@ -1,11 +1,16 @@
 Short Describtion
 
 HD44780library is C library for LCD with HD44780 display controller for AVR 8-bit microcontrollers.
-The library implements 4-bit bus for communication with the HD44780 LCD controller.
+The library implements 4-bit data bus for communication with the HD44780 LCD controller. 
+The communication is done in one direction only, from the microcontroller towards HD44780.
+The library can only write data to HD44780. The value of R/W pin is all the time set to 0 by the library. 
+Busy Flag checks are replaced by time delay functions.
+
 
 Supported MCU Hardware
 
 The library is compatible with every 8-bit AVR microcontroller.
+
 
 
 Library Description
@@ -23,7 +28,7 @@ typedef struct SHD44780
 
 The following functions are included in the library:
 
- - void LCDInit4(TSHD44780 *pHD44780,volatile uint8_t *HD44780_CMD_PORT,volatile uint8_t *HD44780_DATA_PORT,uint8_t HD44780_RS,uint8_t HD44780_E);
+ - void LCDInit4(TSHD44780 *pHD44780,volatile uint8_t *HD44780_CMD_PORT,volatile uint8_t *HD44780_DATA_PORT,uint8_t HD44780_RS,uint8_t HD44780_E,uint8_t HD44780_RW,uint8_t lineNumbers);
 	The function is used to assign AVR ports/pins to the HD44780 bus and initilaze the HD44780 driver.
 
  - void LCDSendCommand4(TSHD44780 *pHD44780,uint8_t Command2Send);
@@ -41,9 +46,10 @@ The following functions are included in the library:
 
 Usage
 
-Operating HD44780 LCD controller in 4-bit data bus requires 6 PINs from the microcontroller:
+Operating HD44780 LCD controller in 4-bit data bus requires 7 PINs from the microcontroller:
 - 4 data pins;
-- 2 command/control PINs.
+- 3 command/control PINs: E, RS and R/W. R/W pin of the LCD is constantly set at logical 0 
+  that puts HD44780 in write mode. The library will not read data out of the HD44780.
 
 Both ports must be specified in the init function. For the PORT that will be selected for the DATA bus,
 the library assumes that the lower nibble from the PORT is reserved for communication with HD44780
@@ -51,10 +57,13 @@ and the higher nibble can be used for other purposes.
 
 For example:
 
-LCDInit4(pHD44780Display,&PORTD,&PORTB,PD4,PD7);
+LCDInit4(pHD44780Display,&PORTD,&PORTB,PD4,PD7,PD6,TWO_LINE_DISPLAY);
 
-defines PORTD as command port with PD4 and PD7 as control pins; PORTB as data port where PD0-3 will be used by the library.
+defines PORTD as command port with PD4, PD7 and PD6 as control pins; 
+PORTB as data port where PD0-3 will be used by the library.
 Those data PINs must be attached to the data pins of HD44780 as described in the data sheet.
+
+Supported commands are listed in the header file.
 
 See example section of the library for further details how to use the functions provided by the library.
 

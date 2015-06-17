@@ -25,16 +25,32 @@
 // List of LCD commands
 #define CLEAR_DISPLAY 0x01
 #define RETURN_CURSOR_HOME 0x02
-#define TURN_OFF 0x08
-#define CURSOR_ON 0x0F
-#define CURSOR_OFF 0x0C
+
+#define ENTRY_MODE 0x04
+#define CURSOR_MOVE_DIRECTION_INC 0x02
+#define DISPLAY_SHIFT 0x01
+
+#define DISPLAY_CONTROL 0x08
+#define LCD_TURN_ON 0x04
+#define CURSOR_ON 0x02
+#define BLINKING_CURSOR_ON 0x01
+
 #define SHIFT_CONTENT_LEFT 0x18
 #define SHIFT_CONTENT_RIGTH 0x1C
 #define MOVE_CURSOR_LEFT 0x10
 #define MOVE_CURSOR_RIGTH 0x14
+
+#define FUNCTION_SET 0x20
+#define 4BIT_DATA_LENGTH 0x00
+#define TWO_LINE_DISPLAY 0x08
+#define SINGLE_LINE_DISPLAY 0x00
+#define FONT_SIZE 0x04
+
 #define SET_ONE_LINE_MODE 0x20
 #define SET_TWO_LINE_MODE 0x28
+
 #define NEW_LINE 0xC0
+
 #define SELECT_LINE_1 0x80
 #define SELECT_LINE_2 0xC0
 
@@ -81,7 +97,7 @@ void delayloop32( uint32_t l); // not inline
 void delayloop32(uint32_t loops);
 
 // Init function for HD44789 
-void LCDInit4(TSHD44780 *pHD44780,volatile uint8_t *HD44780_CMD_PORT,volatile uint8_t *HD44780_DATA_PORT,uint8_t HD44780_RS,uint8_t HD44780_E);
+void LCDInit4(TSHD44780 *pHD44780,volatile uint8_t *HD44780_CMD_PORT,volatile uint8_t *HD44780_DATA_PORT,uint8_t HD44780_RS,uint8_t HD44780_E,uint8_t HD44780_RW,uint8_t lineNumbers);
 
 //Send commands to the LCD over 4-but bus
 void LCDSendCommand4(TSHD44780 *pHD44780,uint8_t Command2Send);
