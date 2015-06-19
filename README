@@ -11,6 +11,10 @@ Supported MCU Hardware
 
 The library is compatible with every 8-bit AVR microcontroller.
 
+Supported LCD 
+
+16x2 LCD  
+16x4 LCD
 
 
 Library Description
