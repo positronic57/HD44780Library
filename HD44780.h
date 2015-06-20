@@ -21,6 +21,7 @@
 #define F_CPU 16000000UL
 #endif
 
+#define LCDSetCursorPosition4(LCD,lineBaseAddress,position) LCDSendCommand4(LCD,lineBaseAddress+position)
 
 //List of LCD commands
 #define CLEAR_DISPLAY 0x01
@@ -118,9 +119,5 @@ void LCDShowCharacter4(TSHD44780 *pHD44780,char Character2Show);
 
 //Send string to the LCD
 void LCDShowString4(TSHD44780 *pHD44780,char *String2Show);
-
-//Set cursor position on the LCD
-void LCDSetCursorPosition4(TSHD44780 *pHD44780,uint8_t raw, uint8_t column);
-
 
 #endif /* HD44780_H_ */

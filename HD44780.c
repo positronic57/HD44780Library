@@ -146,8 +146,3 @@ void LCDShowString4(TSHD44780 *pHD44780,char *String2Show)
 	while(*String2Show)
 	LCDShowCharacter4(pHD44780,*String2Show++);
 }
-
-void LCDSetCursorPosition4(TSHD44780 *pHD44780, uint8_t raw, uint8_t column)
-{
-	LCDSendCommand4(pHD44780,raw+column);
-}
