@@ -41,6 +41,7 @@ int main(void)
 	
 	LCDSendCommand4(pHD44780Display,CURSOR_ON);
 	LCDSendCommand4(pHD44780Display,BLINKING_CURSOR_ON);
+	LCDSetCursorPosition4(pHD44780Display,LCD16x2_SELECT_LINE_1,15);
 	
 	while(1)
 	{

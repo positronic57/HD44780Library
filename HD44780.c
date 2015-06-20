@@ -149,8 +149,5 @@ void LCDShowString4(TSHD44780 *pHD44780,char *String2Show)
 
 void LCDSetCursorPosition4(TSHD44780 *pHD44780, uint8_t raw, uint8_t column)
 {
-	uint8_t LineStartAddress[2]={FIRST_LINE_DDRAM_START_ADDRESS,SECOND_LINE_DDRAM_START_ADDRESS};
-
-	LCDSendCommand4(pHD44780,LineStartAddress[raw]+column);
-
+	LCDSendCommand4(pHD44780,raw+column);
 }
