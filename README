@@ -1,4 +1,4 @@
-Short Describtion
+Short Description
 
 HD44780library is C library for LCD with HD44780 display controller for AVR 8-bit microcontrollers.
 The library implements 4-bit data bus for communication with the HD44780 LCD controller. 
@@ -11,10 +11,9 @@ Supported MCU Hardware
 
 The library is compatible with every 8-bit AVR microcontroller.
 
-Supported LCD 
-
-16x2 LCD  
-16x4 LCD
+Supported sizes of LCD modules based on HD44780:
+- 16x2   
+- 16x4
 
 
 Library Description
@@ -27,6 +26,7 @@ typedef struct SHD44780
 	volatile uint8_t *HD44780_DATA_PORT;	//AVR Port used for the data bus of HD44780 LCD driver
 	uint8_t HD44780_RS;			//Defines the RS control pin from the CMD_PORT
 	uint8_t HD44780_E;			//Defines the E control pin from the CMD_PORT
+	uint8_t HD44780_RW;			//Define the R/W control pin from the CMD_PORT
 } TSHD44780;
 
 
@@ -44,8 +44,9 @@ The following functions are included in the library:
  - void LCDShowString4(TSHD44780 *pHD44780,char *String2Show);
 	Send a string to HD44780;
  
-- void LCDSetCursorPosition4(TSHD44780 *pHD44780,uint8_t raw, uint8_t column);
-	Set cursor position on the LCD. 
+Macros:
+   LCDSetCursorPosition4(LCD,lineBaseAddress,position);
+	Move the cursor in the line with base address<lineBaseAddress> at position<position>. 
 
 
 Usage
@@ -67,9 +68,9 @@ defines PORTD as command port with PD4, PD7 and PD6 as control pins;
 PORTB as data port where PD0-3 will be used by the library.
 Those data PINs must be attached to the data pins of HD44780 as described in the data sheet.
 
-Supported commands are listed in the header file.
+A list of predefined HD44780 commands can be found in the header file.
 
-See example section of the library for further details how to use the functions provided by the library.
+See example section of the library for further details how to use the library in practice.
 
 
 WARNING: 

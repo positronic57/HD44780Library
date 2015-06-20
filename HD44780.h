@@ -76,6 +76,7 @@ typedef struct SHD44780
 	volatile uint8_t *HD44780_DATA_PORT;
 	uint8_t HD44780_RS;
 	uint8_t HD44780_E;
+	uint8_t HD44780_RW;
 } TSHD44780;
 
 
