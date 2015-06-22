@@ -8,7 +8,9 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License.
  *
- * Example of using HD44780 library on Atmega32.
+ * Example of using HD44780 library on Atmega32.The CPU freq is 4MHz defined with F_CPU. 
+ * JHD 162A 16x2 LCD module is used for the test.
+ * 
  * Connection between MCU and LCD:
  * PORTB0 -> LCD D4
  * PORTB1 -> LCD D5
@@ -17,7 +19,7 @@
  * PORTD4 -> LCD RS
  * PORTD6 -> LCD R/W
  * PORTD7 -> LCD E
- *
+ * 
  */ 
 
 #define F_CPU 4000000UL

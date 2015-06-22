@@ -77,4 +77,4 @@ WARNING:
 The source is provided as it is without any warranty. Use it on your own risk!
 The author does not take any responsibility for the damage caused while using this software.
 
-Tested on Atmel Atmega32 microcontroller.
+Tested on Atmel Atmega32 microcontroller with JHD 162A 16x2 LCD module.
