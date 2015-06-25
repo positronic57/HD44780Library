@@ -147,3 +147,26 @@ void LCDShowString4(TSHD44780 *pHD44780,char *String2Show)
 	while(*String2Show)
 	LCDShowCharacter4(pHD44780,*String2Show++);
 }
+
+//Define custom special characters
+void LCDDefineSpecialChars4(TSHD44780 *pHD44780,uint8_t (*charMatrix)[8],uint8_t numberOfSpecChars)
+{
+	uint8_t CGAddress = LCD_CGRAM_START_ADDRESS;
+	uint8_t i,j;
+	
+	if (numberOfSpecChars>8)
+		numberOfSpecChars=8;
+		
+	for(i=0;i<numberOfSpecChars;i++)
+		for(j=0;j<8;j++)
+		{
+			//Set CGRAM address
+			LCDSendCommand4(pHD44780,CGAddress++);
+			//Write data to CGRAM
+			LCDShowCharacter4(pHD44780,*(*(charMatrix+i)+j));
+		}
+	
+	LCDSendCommand4(pHD44780,RETURN_CURSOR_HOME);
+		
+}
+

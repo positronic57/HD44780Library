@@ -60,6 +60,9 @@
 #define LCD16x4_SELECT_LINE_3 0x90
 #define LCD16x4_SELECT_LINE_4 0xD0
 
+//LCD CGRAM address space
+#define LCD_CGRAM_START_ADDRESS 0x40
+
 //LCD DDRAM address space
 #define LCD16x2_FIRST_LINE_DDRAM_START_ADDRESS 0x00
 #define LCD16x2_SECOND_LINE_DDRAM_START_ADDRESS 0x40
@@ -67,7 +70,6 @@
 #define LCD16x4_SECOND_LINE_DDRAM_START_ADDRESS 0x40
 #define LCD16x4_THIRD_LINE_DDRAM_START_ADDRESS 0x10
 #define LCD16x4_FORTH_LINE_DDRAM_START_ADDRESS 0x50
-
 
 
 typedef struct SHD44780
@@ -120,5 +122,8 @@ void LCDShowCharacter4(TSHD44780 *pHD44780,char Character2Show);
 
 //Send string to the LCD
 void LCDShowString4(TSHD44780 *pHD44780,char *String2Show);
+
+//Define custom special characters
+void LCDDefineSpecialChars4(TSHD44780 *pHD44780,uint8_t (*charMatrix)[8],uint8_t numberOfSpecChars);
 
 #endif /* HD44780_H_ */

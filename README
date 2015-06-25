@@ -14,7 +14,13 @@ The library is compatible with every 8-bit AVR microcontroller.
 Supported sizes of LCD modules based on HD44780:
 - 16x2   
 - 16x4
+The other sizes should also be supported but they are not tested yet.
 
+Implemented HD44780 functionalists:
+- send characters via 4bit data bus;
+- send a string;
+- send HD44780 commands;
+- define custom special characters.
 
 Library Description
 
@@ -43,6 +49,9 @@ The following functions are included in the library:
 
  - void LCDShowString4(TSHD44780 *pHD44780,char *String2Show);
 	Send a string to HD44780;
+
+ - void LCDDefineSpecialChars4(TSHD44780 *pHD44780,uint8_t (*charMatrix)[8],uint8_t numberOfSpecChars);
+	Define custom special characters.
  
 Macros:
    LCDSetCursorPosition4(LCD,lineBaseAddress,position);
@@ -69,6 +78,14 @@ PORTB as data port where PD0-3 will be used by the library.
 Those data PINs must be attached to the data pins of HD44780 as described in the data sheet.
 
 A list of predefined HD44780 commands can be found in the header file.
+
+Defining custom special characters
+
+HD44780 supports up to 8 user defined characters. The definitions of the characters are stored in the CGRAM of the controller.
+CGRAM is 64 bytes long where each character is defined by 8 bytes.
+The library expects the characters definitions to be stored in matrix with 8 columnes and up to 8 rows. 
+One column of the matrix should contain the definition of one character.
+
 
 See example section of the library for further details how to use the library in practice.
 
