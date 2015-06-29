@@ -13,7 +13,7 @@ The library is compatible with every 8-bit AVR microcontroller.
 
 Supported sizes of LCD modules based on HD44780:
 - 2x16
-- 2x16
+- 4x16
 The other sizes should also be supported but they are not tested yet.
 
 Implemented HD44780 functionalists:
