@@ -12,8 +12,8 @@ Supported MCU Hardware
 The library is compatible with every 8-bit AVR microcontroller.
 
 Supported sizes of LCD modules based on HD44780:
-- 16x2   
-- 16x4
+- 2x16
+- 2x16
 The other sizes should also be supported but they are not tested yet.
 
 Implemented HD44780 functionalists:
@@ -94,4 +94,5 @@ WARNING:
 The source is provided as it is without any warranty. Use it on your own risk!
 The author does not take any responsibility for the damage caused while using this software.
 
-Tested on Atmel Atmega32 microcontroller with JHD 162A 16x2 LCD module.
+Tested on Atmel Atmega32 microcontroller with: JHD 162A 2x16 LCD module 
+and EA W164B-NLW 4x16 LCD module.

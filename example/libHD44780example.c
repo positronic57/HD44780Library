@@ -37,6 +37,10 @@ int main(void)
 	TSHD44780 HD44780Display;
 	TSHD44780 *pHD44780Display = &HD44780Display;
 	
+	/*
+		Init a display module with 2 lines.
+		In case of 4 line module, replace TWO_LINES_DISPLAY with FOUR_LINES_DISPLAY.	
+	*/	
 	LCDInit4(pHD44780Display,&PORTD,&PORTB,PD4,PD7,PD6,TWO_LINES_DISPLAY);
 	LCDDefineSpecialChars4(pHD44780Display,specCharMatrix,2);
 	
