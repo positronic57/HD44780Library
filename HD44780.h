@@ -53,6 +53,19 @@
 #define SET_ONE_LINE_MODE 0x20
 #define SET_TWO_LINE_MODE 0x28
 
+/* 
+   DDRAM of single line LCD in most of the cases
+   is divided in two 8 bytes wide memory 
+   segments. The starting addresses of 
+   those segments are defined as:
+	- LCD16x1_SELECT_DDRAM_1ST_HALF
+	- LCD16x1_SELECT_DDRAM_2ND_HALF
+   Those LCD modules although they have a single line,
+   due to the DDRAM layout must be configured as
+   two line modules.
+*/
+#define LCD16x1_SELECT_DDRAM_1ST_HALF 0x80
+#define LCD16x1_SELECT_DDRAM_2ND_HALF 0xC0
 #define LCD16x2_SELECT_LINE_1 0x80
 #define LCD16x2_SELECT_LINE_2 0xC0
 

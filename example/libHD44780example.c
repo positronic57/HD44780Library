@@ -38,8 +38,16 @@ int main(void)
 	TSHD44780 *pHD44780Display = &HD44780Display;
 	
 	/*
-		Init a display module with 2 lines.
-		In case of 4 line module, replace TWO_LINES_DISPLAY with FOUR_LINES_DISPLAY.	
+		Use:
+		- TWO_LINES_DISPLAY to init 2 lines module;
+		- FOUR_LINES_DISPLAY to init 4 lines LCD.		
+		
+		Although single line LCD has only one line for presenting the content,
+		the DDRAM memory in most of the modules out there is split in two 8 bytes long buffers.
+		Those single line modules must be initialized using TWO_LINES_DISPLAY
+		as argument of the init function. If that is not the case use 
+		SINGLE_LINE_DISPLAY during the init process.
+
 	*/	
 	LCDInit4(pHD44780Display,&PORTD,&PORTB,PD4,PD7,PD6,TWO_LINES_DISPLAY);
 	LCDDefineSpecialChars4(pHD44780Display,specCharMatrix,2);
@@ -50,6 +58,13 @@ int main(void)
 	LCDSendCommand4(pHD44780Display,LCD16x2_SELECT_LINE_2);
 	LCDShowString4(pHD44780Display,"Tester!!!");
 	
+	/*
+		To manually set the cursor position in case of single line LCD,
+		use the strating addresses of the two 8 bytes
+		wide DDRAM memory segments as base addresses.
+		LCD16x1_SELECT_DDRAM_1ST_HALF
+		LCD16x1_SELECT_DDRAM_2ND_HALF 
+	*/
 	LCDSetCursorPosition4(pHD44780Display,LCD16x2_SELECT_LINE_1,12);
 	LCDSendCommand4(pHD44780Display,CURSOR_ON);
 	LCDSendCommand4(pHD44780Display,BLINKING_CURSOR_ON); 
