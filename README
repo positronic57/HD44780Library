@@ -15,7 +15,8 @@ Supported LCD modules based on HD44780:
 - single line; 
 - two lines;
 - four lines displays.
-
+40x4 LCD with two HD44780 controller chips that have two enable pins are not 
+supported. 
 
 Implemented HD44780 functionalists:
 - send characters via 4bit data bus;
