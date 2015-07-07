@@ -10,20 +10,49 @@
  *
  */ 
 
+/**
+ * @file HD44780.h
+ * @brief 
+ * Header file of HD44780 library. It contains the prototypes of all
+ * functions available in the library, definitions of all macros
+ * and constans.
+ * 
+ * @author Goce Boshkovski
+ * @date 13-Jun-15
+ * @copyright GNU General Public License v2.
+ * 
+ */
 
 #ifndef HD44780_H_
 #define HD44780_H_
 
 #include <stdint.h>
 
-//Define MCU CPU Freq for the time delay functions
+/**
+ * @brief Define MCU CPU Freq used for the time delay functions.
+ * 
+ * If not defined, the library will use the default vale of 4MHz.
+ * 
+ */
 #ifndef F_CPU
-#define F_CPU 16000000UL
+#define F_CPU 4000000UL
 #endif
 
+/** \defgroup libMacros HD44780 library macros */
+/* @{ */
+/**
+ * @def LCDSetCursorPosition4(LCD,lineBaseAddress,position)
+ * Sets the new cursor position defined by
+ * \a as display line and \a position in that line.
+ * 
+ * The new position is send as a command to HD44780 via
+ * LCDSendCommand4() function.
+ */
 #define LCDSetCursorPosition4(LCD,lineBaseAddress,position) LCDSendCommand4(LCD,lineBaseAddress+position)
+/* @} */
 
-//List of LCD commands
+/** \defgroup LCDCommands List of general LCD Commands */
+/* @{ */
 #define CLEAR_DISPLAY 0x01
 #define RETURN_CURSOR_HOME 0x02
 
@@ -52,17 +81,22 @@
 
 #define SET_ONE_LINE_MODE 0x20
 #define SET_TWO_LINE_MODE 0x28
+/* @} */
 
-/* 
-   DDRAM of single line LCD in most of the cases
-   is divided in two 8 bytes wide memory 
-   segments. The starting addresses of 
-   those segments are defined as:
-	- LCD16x1_SELECT_DDRAM_1ST_HALF
-	- LCD16x1_SELECT_DDRAM_2ND_HALF
-   Those LCD modules although they have a single line,
-   due to the DDRAM layout must be configured as
-   two line modules.
+
+/** \defgroup LCDLines List of LCD Commands for selecting a display line */
+/* @{ */
+/** 
+* @par
+* DDRAM of single line LCD in most of the cases
+* is divided in two 8 bytes wide memory
+* segments. The starting addresses of 
+* those segments are defined as:
+*  - LCD16x1_SELECT_DDRAM_1ST_HALF
+*  - LCD16x1_SELECT_DDRAM_2ND_HALF
+* Those LCD modules although they have a single line,
+* due to the DDRAM layout must be configured as
+* two line modules.
 */
 #define LCD16x1_SELECT_DDRAM_1ST_HALF 0x80
 #define LCD16x1_SELECT_DDRAM_2ND_HALF 0xC0
@@ -85,12 +119,15 @@
 
 #define LCD40x2_SELECT_LINE_1 0x80
 #define LCD40x2_SELECT_LINE_2 0xC0
+/* @} */
 
-
-//LCD CGRAM address space
+/** \defgroup LCDCGRAM LCD CGRAM Starting Address */
+/* @{ */
 #define LCD_CGRAM_START_ADDRESS 0x40
+/* @} */
 
-//LCD DDRAM address space
+/** \defgroup LCDDDRAM LCD DDRAM Address Segments*/
+/* @{ */
 #define LCD16x1_FIRST_DDRAM_SEGMENT_START_ADDRESS 0x00
 #define LCD16x1_SECOND_DDRAM_SEGMENT_START_ADDRESS 0x40
 #define LCD16x2_FIRST_LINE_DDRAM_START_ADDRESS 0x00
@@ -107,18 +144,29 @@
 #define LCD20x4_FORTH_LINE_DDRAM_START_ADDRESS 0x54
 #define LCD40x2_FIRST_LINE_DDRAM_START_ADDRESS 0x00
 #define LCD40x2_SECOND_LINE_DDRAM_START_ADDRESS 0x40
+/* @} */
 
-
+/**
+ * @brief Represents the implementation
+ * of the data and command bus used for connecting LCD module with the
+ * AVR microcontroller.
+ */
 typedef struct SHD44780
 {
-	volatile uint8_t *HD44780_CMD_PORT;
-	volatile uint8_t *HD44780_DATA_PORT;
-	uint8_t HD44780_RS;
-	uint8_t HD44780_E;
-	uint8_t HD44780_RW;
+	volatile uint8_t *HD44780_CMD_PORT; /**< pointer to the MCU PORT register used for the command bus.*/
+	volatile uint8_t *HD44780_DATA_PORT; /**< pointer to the MCU PORT register used for the data bus.*/
+	uint8_t HD44780_RS; /**< PIN from the CMD PORT connected to the RS pin of HD44780.*/
+	uint8_t HD44780_E; /**< PIN from the CMD PORT connected to the E pin of HD44780.*/
+	uint8_t HD44780_RW; /**< PIN from the CMD PORT connected to the RW pin of HD44780.*/
 } TSHD44780;
 
-
+/** \defgroup time Time delay functions and macros (Precise Delay Functions V 0.5, Martin Thomas, 9/2004)*/
+/* @{ */
+/**
+ * @author Martin Thomas
+ * @brief Precise Delay Functions
+ * V 0.5, Martin Thomas, 9/2004
+ */
 static inline void delayloop16(uint16_t count)
 {
 	asm volatile (  "cp  %A0,__zero_reg__ \n\t"  \
@@ -132,35 +180,120 @@ static inline void delayloop16(uint16_t count)
 	: "0"  (count)
 	);
 }
-// delayloop16(x) eats 4 cycles per x
+/**
+ * @author Martin Thomas
+ * @brief Precise Delay Functions
+ * V 0.5, Martin Thomas, 9/2004
+ */
 #define DELAY_US_CONV(us) ((uint16_t)(((((us)*1000L)/(1000000000/F_CPU))-1)/4))
+/**
+ * @author Martin Thomas
+ * @brief Precise Delay Functions
+ * V 0.5, Martin Thomas, 9/2004
+ */
 #define delay_us(us)	  delayloop16(DELAY_US_CONV(us))
-
-/* delay function for millisec
-  (6 cycles per x + 20(?) overhead) */
-void delayloop32( uint32_t l); // not inline
+/**
+ * @author Martin Thomas
+ * @brief Precise Delay Functions
+ * V 0.5, Martin Thomas, 9/2004
+ */
+void delayloop32( uint32_t l);
+/**
+ * @author Martin Thomas
+ * @brief Precise Delay Functions
+ * V 0.5, Martin Thomas, 9/2004
+ */
 #define DELAY_MS_CONV(ms) ( (uint32_t) (ms*(F_CPU/6000L)) ) 
+/**
+ * @author Martin Thomas
+ * @brief Precise Delay Functions
+ * V 0.5, Martin Thomas, 9/2004
+ */
 #define delay_ms(ms)  delayloop32(DELAY_MS_CONV(ms))
 
-
-//HD44780 functions
-
-//Delay loop function
 void delayloop32(uint32_t loops);
+/* @} */
 
-// Init function for HD44789 
-void LCDInit4(TSHD44780 *pHD44780,volatile uint8_t *HD44780_CMD_PORT,volatile uint8_t *HD44780_DATA_PORT,uint8_t HD44780_RS,uint8_t HD44780_E,uint8_t HD44780_RW,uint8_t lineNumbers);
+/** \defgroup libFunctions HD44780 library functions */
+/* @{ */
+/**
+ * @brief  Init function for HD44780 controller.
+ * The function defines and configure 
+ * the microcontroller pins that are used as interface for the LCD module.
+ * It performs 4-bit initializations of HD44780 and defines the number
+ * of display lines.
+ * 
+ * @param[in,out] pHD44780 pointer to the structur that represent HD44780
+ * @param[in] HD44780_CMD_PORT is a pointer to the MCU PORT used for cmd bus
+ * @param[in] HD44780_DATA_PORT is a pointer to the MCU PORT used for data bus
+ * @param[in] HD44780_RS defines the MCU pin connected to RS pin of HD44780
+ * @param[in] HD44780_RS MCU defines the pin connected to RS pin of HD44780
+ * @param[in] HD44780_E MCU defines the pin connected to E pin of HD44780
+ * @param[in] HD44780_RW MCU defines the pin connected to RW pin of HD44780 
+ * @param[in] activeLines is number of display lines.
+ * @parblock Possible values are:
+ * SINGLE_LINE_DISPLAY, TWO_LINES_DISPLAY, FOUR_LINE_DISPALY.
+ * DDRAM of single line LCD in most of the cases
+ * is divided in two 8 bytes wide memory 
+ * segments. The starting addresses of 
+ * those segments are defined as:
+ * 	- LCD16x1_SELECT_DDRAM_1ST_HALF;
+ * 	- LCD16x1_SELECT_DDRAM_2ND_HALF.
+ * Those LCD modules although they have a single line,
+ * due to the DDRAM layout must be configured as
+ * two line modules.
+ * @endparblock
+ * @return void.
+ */
+void LCDInit4(TSHD44780 *pHD44780,volatile uint8_t *HD44780_CMD_PORT,volatile uint8_t *HD44780_DATA_PORT,uint8_t HD44780_RS,uint8_t HD44780_E,uint8_t HD44780_RW,uint8_t activeLines);
 
-//Send commands to the LCD over 4-but bus
+/**
+ * @brief The function is used to send a command to HD44780. 
+ * The supported commands are defined in this header file.
+ * 
+ * @param[in] pHD44780 pointer to the structur that represent HD44780
+ * @param[in] Command2Send HD44780 command.
+ */
 void LCDSendCommand4(TSHD44780 *pHD44780,uint8_t Command2Send);
 
-//Send character to the LCD
+/**
+ * @brief Display a character on the LCD at the current cursor position.
+ *  
+ * @param[in] pHD44780 pointer to the structur that represent HD44780
+ * @param[in] Character2Show A character to be desplayed.
+ * 
+ * @return void.
+ */
 void LCDShowCharacter4(TSHD44780 *pHD44780,char Character2Show);
 
-//Send string to the LCD
+/**
+ * @brief Display a string on the LCD starting from the current cursor 
+ * position. The function doesn't move to a new line on the LCD if an 
+ * end of line is reached.
+ *  
+ * @param[in] pHD44780 pointer to the structur that represent HD44780
+ * @param[in] String2Show A string to be desplayed.
+ * 
+ * @return void.
+ */
 void LCDShowString4(TSHD44780 *pHD44780,char *String2Show);
 
-//Define custom special characters
+/**
+ * @brief HD44780 supports up to 8 user defined characters. 
+ * The definitions of the characters are stored in the CGRAM of the controller.
+ * CGRAM is 64 bytes long where each character is defined by 8 bytes.
+ * The function defines those special characters.
+ * 
+ * @param[in] pHD44780 pointer to the structur that represent HD44780
+ * @param[in] charMatrix pointer to a matrix with 8 columns and up to 8 raws.
+ * @parblock
+ * Each raw holds definition of one custom character.
+ * @endparblock
+ * @param[in] numberOfSpecChars numbur of custom character (number of raws of the charMatrix)
+ * 
+ * @return void.
+ */
 void LCDDefineSpecialChars4(TSHD44780 *pHD44780,uint8_t (*charMatrix)[8],uint8_t numberOfSpecChars);
+/* @} */
 
 #endif /* HD44780_H_ */

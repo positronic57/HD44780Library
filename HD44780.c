@@ -10,9 +10,20 @@
  *
  */ 
 
+/** @file HD44780.c
+ *  @brief Implements the functions defined in the header file.
+ *
+ *  @author Goce Boshkovski
+ */
 #include "HD44780.h"
 #include <avr/io.h>
 
+
+/**
+ * @author Martin Thomas
+ * @brief Precise Delay Functions
+ * V 0.5, Martin Thomas, 9/2004
+ */
 //Delay loop functions
 void delayloop32(uint32_t loops)
 {
@@ -36,7 +47,7 @@ void delayloop32(uint32_t loops)
 }
 
 // Configure LCD for 40bit data transfer
-void LCDInit4(TSHD44780 *pHD44780,volatile uint8_t *HD44780_CMD_PORT,volatile uint8_t *HD44780_DATA_PORT,uint8_t HD44780_RS,uint8_t HD44780_E,uint8_t HD44780_RW,uint8_t lineNumbers)
+void LCDInit4(TSHD44780 *pHD44780,volatile uint8_t *HD44780_CMD_PORT,volatile uint8_t *HD44780_DATA_PORT,uint8_t HD44780_RS,uint8_t HD44780_E,uint8_t HD44780_RW,uint8_t activeLines)
 {
 	uint8_t DATA_PORT = *HD44780_DATA_PORT & 0xF0;
 	
