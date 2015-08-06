@@ -18,9 +18,9 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">HD44780 library
-   &#160;<span id="projectnumber">v1.0</span>
+   &#160;<span id="projectnumber">v1.1</span>
    </div>
-   <div id="projectbrief">HD44780 library in C for AVR 8-bit microcontrollers</div>
+   <div id="projectbrief">HD44780 C library for AVR 8-bit microcontrollers</div>
   </td>
  </tr>
  </tbody>
@@ -55,12 +55,10 @@
 <a href="#details">More...</a></p>
 <div class="textblock"><code>#include &quot;<a class="el" href="HD44780_8h_source.html">HD44780.h</a>&quot;</code><br/>
 <code>#include &lt;avr/io.h&gt;</code><br/>
+<code>#include &lt;util/delay.h&gt;</code><br/>
 </div><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:ga9cc720be418a9ce74eed0e8402a15efd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__time.html#ga9cc720be418a9ce74eed0e8402a15efd">delayloop32</a> (uint32_t loops)</td></tr>
-<tr class="memdesc:ga9cc720be418a9ce74eed0e8402a15efd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Precise Delay Functions V 0.5, Martin Thomas, 9/2004.  <a href="group__time.html#ga9cc720be418a9ce74eed0e8402a15efd">More...</a><br/></td></tr>
-<tr class="separator:ga9cc720be418a9ce74eed0e8402a15efd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gadb335c296640f8a448c1d76d4697ef75"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__libFunctions.html#gadb335c296640f8a448c1d76d4697ef75">LCDInit4</a> (<a class="el" href="HD44780_8h.html#a288512a2c7150e13dd79a0033a760998">TSHD44780</a> *pHD44780, volatile uint8_t *HD44780_CMD_PORT, volatile uint8_t *HD44780_DATA_PORT, uint8_t HD44780_RS, uint8_t HD44780_E, uint8_t HD44780_RW, uint8_t activeLines)</td></tr>
 <tr class="memdesc:gadb335c296640f8a448c1d76d4697ef75"><td class="mdescLeft">&#160;</td><td class="mdescRight">Init function for HD44780 controller. The function defines and configure the microcontroller pins that are used as interface for the LCD module. It performs 4-bit initializations of HD44780 and defines the number of display lines.  <a href="group__libFunctions.html#gadb335c296640f8a448c1d76d4697ef75">More...</a><br/></td></tr>
 <tr class="separator:gadb335c296640f8a448c1d76d4697ef75"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -83,7 +81,7 @@ Functions</h2></td></tr>
 </div></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Jul 7 2015 23:10:05 for HD44780 library by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Aug 7 2015 00:49:10 for HD44780 library by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>

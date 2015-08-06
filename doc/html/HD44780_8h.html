@@ -18,9 +18,9 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">HD44780 library
-   &#160;<span id="projectnumber">v1.0</span>
+   &#160;<span id="projectnumber">v1.1</span>
    </div>
-   <div id="projectbrief">HD44780 library in C for AVR 8-bit microcontrollers</div>
+   <div id="projectbrief">HD44780 C library for AVR 8-bit microcontrollers</div>
   </td>
  </tr>
  </tbody>
@@ -185,18 +185,6 @@ Macros</h2></td></tr>
 <tr class="separator:gadbb2a31768f69587306b598139fd909b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gad8d6f78a4b07c152f9548a1218393eff"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__LCDDDRAM.html#gad8d6f78a4b07c152f9548a1218393eff">LCD40x2_SECOND_LINE_DDRAM_START_ADDRESS</a>&#160;&#160;&#160;0x40</td></tr>
 <tr class="separator:gad8d6f78a4b07c152f9548a1218393eff"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gace581006f845a7be3957a85325c27e29"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__time.html#gace581006f845a7be3957a85325c27e29">DELAY_US_CONV</a>(us)&#160;&#160;&#160;((uint16_t)(((((us)*1000L)/(1000000000/F_CPU))-1)/4))</td></tr>
-<tr class="memdesc:gace581006f845a7be3957a85325c27e29"><td class="mdescLeft">&#160;</td><td class="mdescRight">Precise Delay Functions V 0.5, Martin Thomas, 9/2004.  <a href="group__time.html#gace581006f845a7be3957a85325c27e29">More...</a><br/></td></tr>
-<tr class="separator:gace581006f845a7be3957a85325c27e29"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gaf4f937c251678e98e4c41b4d58f232a5"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__time.html#gaf4f937c251678e98e4c41b4d58f232a5">delay_us</a>(us)&#160;&#160;&#160;<a class="el" href="group__time.html#ga1550f94a0f34f9f0884cce748798ad8a">delayloop16</a>(<a class="el" href="group__time.html#gace581006f845a7be3957a85325c27e29">DELAY_US_CONV</a>(us))</td></tr>
-<tr class="memdesc:gaf4f937c251678e98e4c41b4d58f232a5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Precise Delay Functions V 0.5, Martin Thomas, 9/2004.  <a href="group__time.html#gaf4f937c251678e98e4c41b4d58f232a5">More...</a><br/></td></tr>
-<tr class="separator:gaf4f937c251678e98e4c41b4d58f232a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gaee89d01246679c71f220a5c3039768ed"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__time.html#gaee89d01246679c71f220a5c3039768ed">DELAY_MS_CONV</a>(ms)&#160;&#160;&#160;( (uint32_t) (ms*(<a class="el" href="HD44780_8h.html#a43bafb28b29491ec7f871319b5a3b2f8">F_CPU</a>/6000L)) )</td></tr>
-<tr class="memdesc:gaee89d01246679c71f220a5c3039768ed"><td class="mdescLeft">&#160;</td><td class="mdescRight">Precise Delay Functions V 0.5, Martin Thomas, 9/2004.  <a href="group__time.html#gaee89d01246679c71f220a5c3039768ed">More...</a><br/></td></tr>
-<tr class="separator:gaee89d01246679c71f220a5c3039768ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga389926e6490f1d3db0f0896e8b0f5f2e"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__time.html#ga389926e6490f1d3db0f0896e8b0f5f2e">delay_ms</a>(ms)&#160;&#160;&#160;<a class="el" href="group__time.html#ga9cc720be418a9ce74eed0e8402a15efd">delayloop32</a>(<a class="el" href="group__time.html#gaee89d01246679c71f220a5c3039768ed">DELAY_MS_CONV</a>(ms))</td></tr>
-<tr class="memdesc:ga389926e6490f1d3db0f0896e8b0f5f2e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Precise Delay Functions V 0.5, Martin Thomas, 9/2004.  <a href="group__time.html#ga389926e6490f1d3db0f0896e8b0f5f2e">More...</a><br/></td></tr>
-<tr class="separator:ga389926e6490f1d3db0f0896e8b0f5f2e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
 Typedefs</h2></td></tr>
@@ -206,12 +194,6 @@ Typedefs</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:ga1550f94a0f34f9f0884cce748798ad8a"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__time.html#ga1550f94a0f34f9f0884cce748798ad8a">delayloop16</a> (uint16_t count)</td></tr>
-<tr class="memdesc:ga1550f94a0f34f9f0884cce748798ad8a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Precise Delay Functions V 0.5, Martin Thomas, 9/2004.  <a href="group__time.html#ga1550f94a0f34f9f0884cce748798ad8a">More...</a><br/></td></tr>
-<tr class="separator:ga1550f94a0f34f9f0884cce748798ad8a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga9cc720be418a9ce74eed0e8402a15efd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__time.html#ga9cc720be418a9ce74eed0e8402a15efd">delayloop32</a> (uint32_t l)</td></tr>
-<tr class="memdesc:ga9cc720be418a9ce74eed0e8402a15efd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Precise Delay Functions V 0.5, Martin Thomas, 9/2004.  <a href="group__time.html#ga9cc720be418a9ce74eed0e8402a15efd">More...</a><br/></td></tr>
-<tr class="separator:ga9cc720be418a9ce74eed0e8402a15efd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gadb335c296640f8a448c1d76d4697ef75"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__libFunctions.html#gadb335c296640f8a448c1d76d4697ef75">LCDInit4</a> (<a class="el" href="HD44780_8h.html#a288512a2c7150e13dd79a0033a760998">TSHD44780</a> *pHD44780, volatile uint8_t *HD44780_CMD_PORT, volatile uint8_t *HD44780_DATA_PORT, uint8_t HD44780_RS, uint8_t HD44780_E, uint8_t HD44780_RW, uint8_t activeLines)</td></tr>
 <tr class="memdesc:gadb335c296640f8a448c1d76d4697ef75"><td class="mdescLeft">&#160;</td><td class="mdescRight">Init function for HD44780 controller. The function defines and configure the microcontroller pins that are used as interface for the LCD module. It performs 4-bit initializations of HD44780 and defines the number of display lines.  <a href="group__libFunctions.html#gadb335c296640f8a448c1d76d4697ef75">More...</a><br/></td></tr>
 <tr class="separator:gadb335c296640f8a448c1d76d4697ef75"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -267,7 +249,7 @@ Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Jul 7 2015 23:10:05 for HD44780 library by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Aug 7 2015 00:49:10 for HD44780 library by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>

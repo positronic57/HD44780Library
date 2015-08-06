@@ -4,7 +4,7 @@ HD44780library is C library for LCD with HD44780 display controller for AVR 8-bi
 The library implements 4-bit data bus for communication with the HD44780 LCD controller. 
 The communication is done in one direction only, from the microcontroller towards HD44780.
 The library can only write data to HD44780. The value of R/W pin is all the time set to 0 by the library. 
-Busy Flag checks are replaced by time delay functions written by Martin Thomas.
+Busy Flag checks are replaced by time delay functions.
 
 Supported MCU Hardware
 
