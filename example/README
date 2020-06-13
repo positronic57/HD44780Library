@@ -1,0 +1,32 @@
+Install HD44780Library before compiling this example.
+
+The build script assumes that the library and the header files are installed in the default locations
+(they are stated in the INSTALL manual of the library).
+
+If that is not the case, adjust the variables: LIBRARY_PATH and HEADERS_PATH in Makefile with the
+appropriate values.
+
+
+Building the Example
+
+Build the code with:
+
+  #make 
+
+
+MCU and CPU Frequency
+
+Use "mcu" and "cpu_freq" command line arguments when calling "make" tool for specifying 
+the AVR8 target device and its CPU frequency. They should be the same with the values used 
+for building the library.
+
+For example:
+ 
+  #make mcu=atmega8 cpu_freq=8000000L
+
+The default values are "atmega32" and "4000000L".
+
+Hardware
+
+The header of the source code contains information how the LCD module is connected to the
+Atmega32 MCU. Four pins from PORTB are used for data transfer and three pins for control.

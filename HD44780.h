@@ -1,15 +1,3 @@
-/*
- * HD44780.h
- *
- * Created: 13-Jun-15 22:42:20
- * Author: Goce Boshkovski
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License. 
- *
- */ 
-
 /**
  * @file HD44780.h
  * @brief 

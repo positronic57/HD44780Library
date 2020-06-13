@@ -37,7 +37,6 @@ int main(void)
 	uint8_t specCharMatrix[2][8]={{0x15,0x15,0x15,0x15,0x15,0x15,0x1F,0x00},{0x0E,0x0A,0x0A,0x0A,0x0A,0x1F,0x11,0x00}};
 								
 	TSHD44780 HD44780Display;
-	TSHD44780 *pHD44780Display = &HD44780Display;
 	
 	/*
 		Use:
@@ -51,14 +50,14 @@ int main(void)
 		SINGLE_LINE_DISPLAY during the init process.
 
 	*/	
-	LCDInit4(pHD44780Display,&PORTD,&PORTB,PD4,PD7,PD6,TWO_LINES_DISPLAY);
-	LCDDefineSpecialChars4(pHD44780Display,specCharMatrix,2);
+	LCDInit4(&HD44780Display, &PORTD, &PORTB, PD4, PD7, PD6,TWO_LINES_DISPLAY);
+	LCDDefineSpecialChars4(&HD44780Display, specCharMatrix, 2);
 	
-	LCDSendCommand4(pHD44780Display,DISPLAY_ON); 
+	LCDSendCommand4(&HD44780Display, DISPLAY_ON); 
 
-	LCDShowString4(pHD44780Display,"libHD44780");
-	LCDSendCommand4(pHD44780Display,LCD16x2_SELECT_LINE_2);
-	LCDShowString4(pHD44780Display,"Tester!!!");
+	LCDShowString4(&HD44780Display, "libHD44780");
+	LCDSendCommand4(&HD44780Display, LCD16x2_SELECT_LINE_2);
+	LCDShowString4(&HD44780Display, "Tester!!!");
 	
 	/*
 		To manually set the cursor position in case of single line LCD,
@@ -67,13 +66,13 @@ int main(void)
 		LCD16x1_SELECT_DDRAM_1ST_HALF
 		LCD16x1_SELECT_DDRAM_2ND_HALF 
 	*/
-	LCDSetCursorPosition4(pHD44780Display,LCD16x2_SELECT_LINE_1,12);
-	LCDSendCommand4(pHD44780Display,CURSOR_ON);
-	LCDSendCommand4(pHD44780Display,BLINKING_CURSOR_ON); 
+	LCDSetCursorPosition4(&HD44780Display, LCD16x2_SELECT_LINE_1, 12);
+	LCDSendCommand4(&HD44780Display, CURSOR_ON);
+	LCDSendCommand4(&HD44780Display, BLINKING_CURSOR_ON); 
 	
 	//Show the data from the CGRAM
-	LCDShowCharacter4(pHD44780Display,0x00);
-	LCDShowCharacter4(pHD44780Display,0x01);
+	LCDShowCharacter4(&HD44780Display, 0x00);
+	LCDShowCharacter4(&HD44780Display, 0x01);
 	
 	while(1)
 	{

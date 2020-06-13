@@ -1,20 +1,12 @@
-/*
- * HD44780.c
+/** 
+ * @file HD44780.c
+ * @brief Implements the functions defined in the header file.
  *
- * Created: 13-Jun-15 23:01:49
- * Author: Goce Boshkovski
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License. 
- *
- */ 
-
-/** @file HD44780.c
- *  @brief Implements the functions defined in the header file.
- *
- *  @author Goce Boshkovski
+ * @author Goce Boshkovski
+ * @date 13-Jun-15
+ * @copyright GNU General Public License v2.
  */
+
 #include "HD44780.h"
 #include <avr/io.h>
 #include <util/delay.h>
