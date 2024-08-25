@@ -7,12 +7,21 @@
  * @copyright GNU General Public License v2.
  */
 
-#include "HD44780.h"
 #include <avr/io.h>
 #include <util/delay.h>
 
+#include "HD44780.h"
+
+
 // Configure LCD for 40bit data transfer
-void LCDInit4(TSHD44780 *pHD44780,volatile uint8_t *HD44780_CMD_PORT,volatile uint8_t *HD44780_DATA_PORT,uint8_t HD44780_RS,uint8_t HD44780_E,uint8_t HD44780_RW,uint8_t activeLines)
+void LCDInit4(TSHD44780 *pHD44780, 
+	volatile uint8_t *HD44780_CMD_PORT, 
+	volatile uint8_t *HD44780_DATA_PORT, 
+	uint8_t HD44780_RS, 
+	uint8_t HD44780_E, 
+	uint8_t HD44780_RW, 
+	enum DISPLAY_SIZE_IN_LINES activeLines
+)
 {
 	uint8_t DATA_PORT = *HD44780_DATA_PORT & 0xF0;
 	
@@ -55,16 +64,16 @@ void LCDInit4(TSHD44780 *pHD44780,volatile uint8_t *HD44780_CMD_PORT,volatile ui
 	*(pHD44780->HD44780_CMD_PORT) &= ~(_BV(HD44780_E));
 	_delay_us(200);
 
-	LCDSendCommand4(pHD44780,(FUNCTION_SET|FOUR_BIT_DATA_LENGTH|activeLines));
-	LCDSendCommand4(pHD44780,DISPLAY_OFF); 
-	LCDSendCommand4(pHD44780,CLEAR_DISPLAY);
-	LCDSendCommand4(pHD44780,(ENTRY_MODE|CURSOR_MOVE_DIRECTION_INC));
+	LCDSendCommand4(pHD44780, (FUNCTION_SET | FOUR_BIT_DATA_LENGTH | activeLines));
+	LCDSendCommand4(pHD44780, DISPLAY_OFF); 
+	LCDSendCommand4(pHD44780, CLEAR_DISPLAY);
+	LCDSendCommand4(pHD44780, (ENTRY_MODE|CURSOR_MOVE_DIRECTION_INC));
 	
 }
 
 
 //Send command to HD44780
-void LCDSendCommand4(TSHD44780 *pHD44780, uint8_t Command2Send)
+void LCDSendCommand4(const TSHD44780 *pHD44780, uint8_t Command2Send)
 {
 	uint8_t DATA_PORT = (*pHD44780->HD44780_DATA_PORT) & 0xF0;
 	
@@ -89,7 +98,7 @@ void LCDSendCommand4(TSHD44780 *pHD44780, uint8_t Command2Send)
 }
 
 //Display a character on LCD
-void LCDShowCharacter4(TSHD44780 *pHD44780, char Character2Show)
+void LCDShowCharacter4(const TSHD44780 *pHD44780, char Character2Show)
 {
 	uint8_t DATA_PORT = (*pHD44780->HD44780_DATA_PORT) & 0xF0;
 	
@@ -118,14 +127,15 @@ void LCDShowCharacter4(TSHD44780 *pHD44780, char Character2Show)
 
 
 //Display a string on the LCD
-void LCDShowString4(TSHD44780 *pHD44780,char *String2Show)
+void LCDShowString4(const TSHD44780 *pHD44780, const char *String2Show)
 {
-	while(*String2Show)
-	LCDShowCharacter4(pHD44780,*String2Show++);
+	while(*String2Show) {
+		LCDShowCharacter4(pHD44780,*String2Show++);
+	}
 }
 
 //Define custom special characters
-void LCDDefineSpecialChars4(TSHD44780 *pHD44780,uint8_t (*charMatrix)[8],uint8_t numberOfSpecChars)
+void LCDDefineSpecialChars4(const TSHD44780 *pHD44780, const uint8_t (*charMatrix)[8], uint8_t numberOfSpecChars)
 {
 	uint8_t CGAddress = LCD_CGRAM_START_ADDRESS;
 	uint8_t i,j;

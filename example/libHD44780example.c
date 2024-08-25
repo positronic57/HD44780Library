@@ -27,6 +27,8 @@
 #endif
 
 #include <avr/io.h>
+#include <util/delay.h>
+
 #include "HD44780.h"
 
 
@@ -34,7 +36,10 @@ int main(void)
 {
     
 	//Define custom special characters. In this example those are Cyrillic letters: sh and d.
-	uint8_t specCharMatrix[2][8]={{0x15,0x15,0x15,0x15,0x15,0x15,0x1F,0x00},{0x0E,0x0A,0x0A,0x0A,0x0A,0x1F,0x11,0x00}};
+	uint8_t specCharMatrix[2][8]={ 
+		{ 0x15, 0x15, 0x15, 0x15, 0x15, 0x15, 0x1F, 0x00 },
+		{ 0x0E, 0x0A, 0x0A, 0x0A, 0x0A, 0x1F, 0x11, 0x00 }
+	};
 								
 	TSHD44780 HD44780Display;
 	
@@ -50,7 +55,7 @@ int main(void)
 		SINGLE_LINE_DISPLAY during the init process.
 
 	*/	
-	LCDInit4(&HD44780Display, &PORTD, &PORTB, PD4, PD7, PD6,TWO_LINES_DISPLAY);
+	LCDInit4(&HD44780Display, &PORTD, &PORTB, PD4, PD7, PD6, TWO_LINES_DISPLAY);
 	LCDDefineSpecialChars4(&HD44780Display, specCharMatrix, 2);
 	
 	LCDSendCommand4(&HD44780Display, DISPLAY_ON); 
@@ -74,8 +79,7 @@ int main(void)
 	LCDShowCharacter4(&HD44780Display, 0x00);
 	LCDShowCharacter4(&HD44780Display, 0x01);
 	
-	while(1)
-	{
-        
-	}
+	while(1) {
+      _delay_us(100);
+ 	}
 }

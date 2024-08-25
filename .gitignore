@@ -1,0 +1,13 @@
+Debug/
+Release/
+**/*.d
+**/*.o
+**/*.map
+**/*.hex
+**/*.elf
+**/*.a
+README.dox
+doxyfile_HD44780library
+.settings/
+build/
+.vscode/
