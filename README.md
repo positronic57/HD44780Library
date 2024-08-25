@@ -37,7 +37,7 @@ Implemented HD44780 features:
 
 #### Doc
 
-Doxygen generated documentation is available in the  [doc](doc/index.html) folder.
+Doxygen generated documentation is available in the  doc folder.
 
 #### Usage
 
