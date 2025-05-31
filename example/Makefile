@@ -13,16 +13,16 @@ endif
 
 #CPU frequency (must be the same as the value used while building DS18S20Library).
 ifndef cpu_freq
-	CPU_FREQ = 4000000L
+	CPU_FREQ = 16000000L
 else
 	CPU_FREQ = $(cpu_freq)
 endif
 
 #Header files path (Update this with the library installation folder).
-HEADERS_PATH = /usr/local/include/avr8
+HEADERS_PATH = /usr/local/include/avr
 
 #Library path
-LIBRARY_PATH = /usr/local/lib/avr8/$(MCU)
+LIBRARY_PATH = /usr/local/lib/avr/$(MCU)
 
 #List of source files
 SOURCES += $(PROJECT).c

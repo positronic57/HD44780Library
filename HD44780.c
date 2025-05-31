@@ -12,6 +12,56 @@
 
 #include "HD44780.h"
 
+/* Function as a macro. It generates the a pulse with logical '1' duration
+ * of _pulse_lenght_us micro seconds
+ */
+#define GENERATE_E_PULSE(_pulse_high_us)                              \
+    *(pHD44780->HD44780_CMD_PORT) |= _BV(pHD44780->HD44780_E);          \
+    _delay_us(_pulse_high_us);                                        \
+    *(pHD44780->HD44780_CMD_PORT) &= ~(_BV(pHD44780->HD44780_E));       \
+    _delay_us(_pulse_high_us);
+
+
+void LCDSendData4(const TSHD44780 *pHD44780, enum HD4478_DATA_TYPE data_type, uint8_t data_value)
+{
+    uint8_t DATA_PORT = (*pHD44780->HD44780_DATA_PORT) & 0xF0;
+
+    // Pull the R/W line to low, for write
+    *(pHD44780->HD44780_CMD_PORT) &= ~_BV(pHD44780->HD44780_RW);
+
+    switch(data_type)
+    {
+    case DATA_TYPE_INSTRUCTION:
+        // Select an instruction register for write as a target
+        *(pHD44780->HD44780_CMD_PORT) &= ~(_BV(pHD44780->HD44780_RS));
+        break;
+    case DATA_TYPE_DATA:
+        // Select a data register for write as a target
+        *(pHD44780->HD44780_CMD_PORT) |= _BV(pHD44780->HD44780_RS);
+        break;
+    }
+    // Pull E pin low
+   *(pHD44780->HD44780_CMD_PORT) &= ~(_BV(pHD44780->HD44780_E));
+
+    // Place the first 4 bits of the data on the data bus/lines
+    DATA_PORT |= (data_value >> 4);
+    *(pHD44780->HD44780_DATA_PORT) = DATA_PORT;
+
+    // Generate an impulse on E line to imform the controller that the data are available
+    GENERATE_E_PULSE(5);
+
+    // Place the next 4 bits of the data on the data lines
+    DATA_PORT = (*pHD44780->HD44780_DATA_PORT) & 0xF0;
+    DATA_PORT |= data_value & 0x0F;
+    *(pHD44780->HD44780_DATA_PORT) = DATA_PORT;
+
+    // Generate an impulse on E line to inform the controller that the data are available
+    GENERATE_E_PULSE(5);
+
+    // Wait for the LCD controller to be ready fo rthe next data/command by
+    _delay_ms(2);
+}
+
 
 // Configure LCD for 40bit data transfer
 void LCDInit4(TSHD44780 *pHD44780, 
@@ -23,10 +73,6 @@ void LCDInit4(TSHD44780 *pHD44780,
 	enum DISPLAY_SIZE_IN_LINES activeLines
 )
 {
-	uint8_t DATA_PORT = *HD44780_DATA_PORT & 0xF0;
-	
-	_delay_ms(50);
-
 	//Init ports/pins to which HD44780 is attached. The data bus is 4 bit
 	pHD44780->HD44780_CMD_PORT = HD44780_CMD_PORT;
 	pHD44780->HD44780_DATA_PORT = HD44780_DATA_PORT;
@@ -34,95 +80,31 @@ void LCDInit4(TSHD44780 *pHD44780,
 	pHD44780->HD44780_RS = HD44780_RS;
 	pHD44780->HD44780_RW = HD44780_RW;
 
-	*(pHD44780->HD44780_CMD_PORT) &= ~(_BV(HD44780_RS) |_BV(HD44780_E) |_BV(HD44780_RW)); //Set the control bus PINs to logical 0
-	*(pHD44780->HD44780_CMD_PORT-1) |= (_BV(HD44780_RS)|_BV(HD44780_E)|_BV(HD44780_RW));  // Define the control bus PINs as outputs
+    *(pHD44780->HD44780_CMD_PORT - 1) |= (_BV(HD44780_RS) | _BV(HD44780_E) | _BV(HD44780_RW));  // Define the control bus PINs as outputs
+    *(pHD44780->HD44780_DATA_PORT-1) |= 0x0F; //Define the lower 4 bits from the DATA_PORT as output PINs
 
-	DATA_PORT |= 0x03;
-	*(pHD44780->HD44780_DATA_PORT) = DATA_PORT;
-	*(pHD44780->HD44780_DATA_PORT-1) |= 0x0F; //Define the lower 4 bits from the DATA_PORT as output PINs
-	
-	*(pHD44780->HD44780_CMD_PORT) |= _BV(HD44780_E);
-	_delay_us(5);
-	*(pHD44780->HD44780_CMD_PORT) &= ~(_BV(HD44780_E));
-	_delay_ms(5);
+    *(pHD44780->HD44780_CMD_PORT) &= ~(_BV(HD44780_RS) | _BV(HD44780_E) | _BV(HD44780_RW)); // Set the control bus PINs to logical 0
+    *(pHD44780->HD44780_DATA_PORT) |= 0x03;
 
-	*(pHD44780->HD44780_CMD_PORT) |= _BV(HD44780_E);
-	_delay_us(5);
-	*(pHD44780->HD44780_CMD_PORT) &= ~(_BV(HD44780_E));
+    GENERATE_E_PULSE(5);
+    _delay_ms(5);
+
+    GENERATE_E_PULSE(5);
 	_delay_us(200);
 
-	*(pHD44780->HD44780_CMD_PORT) |= _BV(HD44780_E);
-	_delay_us(5);
-	*(pHD44780->HD44780_CMD_PORT) &= ~(_BV(HD44780_E));
+    GENERATE_E_PULSE(5);
 	_delay_us(200);
 	
-	DATA_PORT = *HD44780_DATA_PORT & 0xF0;
-	DATA_PORT |= 0x02;
-	*(pHD44780->HD44780_DATA_PORT) = DATA_PORT;
-	*(pHD44780->HD44780_CMD_PORT) |= _BV(HD44780_E);
-	_delay_us(5);
-	*(pHD44780->HD44780_CMD_PORT) &= ~(_BV(HD44780_E));
+    *HD44780_DATA_PORT &= 0xF0;
+    *(pHD44780->HD44780_DATA_PORT) |= 0x02;
+
+    GENERATE_E_PULSE(5);
 	_delay_us(200);
 
-	LCDSendCommand4(pHD44780, (FUNCTION_SET | FOUR_BIT_DATA_LENGTH | activeLines));
-	LCDSendCommand4(pHD44780, DISPLAY_OFF); 
-	LCDSendCommand4(pHD44780, CLEAR_DISPLAY);
-	LCDSendCommand4(pHD44780, (ENTRY_MODE|CURSOR_MOVE_DIRECTION_INC));
-	
-}
-
-
-//Send command to HD44780
-void LCDSendCommand4(const TSHD44780 *pHD44780, uint8_t Command2Send)
-{
-	uint8_t DATA_PORT = (*pHD44780->HD44780_DATA_PORT) & 0xF0;
-	
-	*(pHD44780->HD44780_CMD_PORT) &= ~(_BV(pHD44780->HD44780_RS)|_BV(pHD44780->HD44780_E)); 
-	
-	DATA_PORT |= (Command2Send >> 4); 	
-	*(pHD44780->HD44780_DATA_PORT) = DATA_PORT; 
-		
-	*(pHD44780->HD44780_CMD_PORT) |= _BV(pHD44780->HD44780_E); 
-	
-	_delay_us(5);
-	*(pHD44780->HD44780_CMD_PORT) &= ~(_BV(pHD44780->HD44780_E)); 
-	
-	DATA_PORT = (*pHD44780->HD44780_DATA_PORT) & 0xF0;
-	DATA_PORT |= (Command2Send & 0x0F);
-	*(pHD44780->HD44780_DATA_PORT) = DATA_PORT;
-	*(pHD44780->HD44780_CMD_PORT) |= _BV(pHD44780->HD44780_E); 
-	_delay_us(5);
-	*(pHD44780->HD44780_CMD_PORT) &= ~(_BV(pHD44780->HD44780_E)); 
-	_delay_ms(2);
-
-}
-
-//Display a character on LCD
-void LCDShowCharacter4(const TSHD44780 *pHD44780, char Character2Show)
-{
-	uint8_t DATA_PORT = (*pHD44780->HD44780_DATA_PORT) & 0xF0;
-	
-	_delay_ms(1);
-	*(pHD44780->HD44780_CMD_PORT) |= _BV(pHD44780->HD44780_RS);
-	*(pHD44780->HD44780_CMD_PORT) &= ~(_BV(pHD44780->HD44780_E));
-
-	DATA_PORT |= (Character2Show >> 4); 	
-	*(pHD44780->HD44780_DATA_PORT) = DATA_PORT;
-	
-	*(pHD44780->HD44780_CMD_PORT) |= _BV(pHD44780->HD44780_E);
-	_delay_us(5);
-	*(pHD44780->HD44780_CMD_PORT) &= ~(_BV(pHD44780->HD44780_E));
-
-	DATA_PORT = (*pHD44780->HD44780_DATA_PORT) & 0xF0;
-	DATA_PORT |= Character2Show & 0x0F;
-	*(pHD44780->HD44780_DATA_PORT) = DATA_PORT;
-	*(pHD44780->HD44780_CMD_PORT) |= _BV(pHD44780->HD44780_E);
-	_delay_us(5);
-	*(pHD44780->HD44780_CMD_PORT) &= ~(_BV(pHD44780->HD44780_E));
-
-	//Time delay for the HD44780 to process the command
-	_delay_ms(1);
-	
+    LCDSendData4(pHD44780, DATA_TYPE_INSTRUCTION, (FUNCTION_SET | FOUR_BIT_DATA_LENGTH | activeLines));
+    LCDSendData4(pHD44780, DATA_TYPE_INSTRUCTION, DISPLAY_OFF);
+    LCDSendData4(pHD44780, DATA_TYPE_INSTRUCTION, CLEAR_DISPLAY);
+    LCDSendData4(pHD44780, DATA_TYPE_INSTRUCTION, (ENTRY_MODE|CURSOR_MOVE_DIRECTION_INC));
 }
 
 
@@ -130,7 +112,7 @@ void LCDShowCharacter4(const TSHD44780 *pHD44780, char Character2Show)
 void LCDShowString4(const TSHD44780 *pHD44780, const char *String2Show)
 {
 	while(*String2Show) {
-		LCDShowCharacter4(pHD44780,*String2Show++);
+        LCDSendData4(pHD44780, DATA_TYPE_DATA, *String2Show++);
 	}
 }
 
@@ -140,19 +122,23 @@ void LCDDefineSpecialChars4(const TSHD44780 *pHD44780, const uint8_t (*charMatri
 	uint8_t CGAddress = LCD_CGRAM_START_ADDRESS;
 	uint8_t i,j;
 	
-	if (numberOfSpecChars>8)
-		numberOfSpecChars=8;
-		
-	for(i=0;i<numberOfSpecChars;i++)
-		for(j=0;j<8;j++)
+    if (numberOfSpecChars > 8) {
+        numberOfSpecChars = 8;
+    }
+
+    for(i = 0; i < numberOfSpecChars; i++)
+    {
+        for(j = 0; j < 8; j++)
 		{
 			//Set CGRAM address
-			LCDSendCommand4(pHD44780,CGAddress++);
+            LCDSendData4(pHD44780, DATA_TYPE_INSTRUCTION, CGAddress++);
 			//Write data to CGRAM
-			LCDShowCharacter4(pHD44780,*(*(charMatrix+i)+j));
+            LCDSendData4(pHD44780, DATA_TYPE_DATA, *(*(charMatrix + i) + j));
 		}
-	
-	LCDSendCommand4(pHD44780,RETURN_CURSOR_HOME);
-		
+    }
+
+    LCDSendData4(pHD44780, DATA_TYPE_INSTRUCTION, RETURN_CURSOR_HOME);
 }
+
+
 

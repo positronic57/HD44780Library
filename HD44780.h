@@ -23,7 +23,7 @@
  * 
  */
 #ifndef F_CPU
-#define F_CPU 4000000UL
+#define F_CPU 16000000UL
 #endif
 
 /** \defgroup libMacros HD44780 library macros */
@@ -36,7 +36,7 @@
  * The new position is send as a command to HD44780 via
  * LCDSendCommand4() function.
  */
-#define LCDSetCursorPosition4(LCD, lineBaseAddress, position) LCDSendCommand4(LCD, lineBaseAddress+position)
+#define LCDSetCursorPosition4(LCD, lineBaseAddress, position) LCDSendData4(LCD, DATA_TYPE_INSTRUCTION, lineBaseAddress + position)
 /** @} */
 
 /** \defgroup LCDCommands List of general LCD Commands */
@@ -142,6 +142,14 @@ enum DISPLAY_SIZE_IN_LINES {
 	TWO_LINES_DISPLAY = 0x08,
 	FOUR_LINES_DISPLAY = 0x08
 };
+
+/**
+ * Enum for type of the data transfer to the LCD controller
+ */
+enum HD4478_DATA_TYPE {
+    DATA_TYPE_INSTRUCTION = 0,
+    DATA_TYPE_DATA = 1
+};
 /** @} */
 
 /**
@@ -169,7 +177,7 @@ typedef struct SHD44780
  * 
  * @example libHD44780example.c
  * 
- * @param[in,out] pHD44780 pointer to the structur that represent HD44780
+ * @param[in,out] pHD44780 pointer to the structure that represent HD44780
  * @param[in] HD44780_CMD_PORT pointer, addredess of the MCU PORT used for cmd bus
  * @param[in] HD44780_DATA_PORT  pointer, address of the MCU PORT used for data bus
  * @param[in] HD44780_RS defines the MCU pin connected to RS pin of HD44780
@@ -191,7 +199,7 @@ typedef struct SHD44780
  * @endparblock
  * @return void.
  */
-void LCDInit4(TSHD44780 *pHD44780, 
+extern void LCDInit4(TSHD44780 *pHD44780,
 	volatile uint8_t *HD44780_CMD_PORT, 
 	volatile uint8_t *HD44780_DATA_PORT, 
 	uint8_t HD44780_RS, 
@@ -201,23 +209,13 @@ void LCDInit4(TSHD44780 *pHD44780,
 );
 
 /**
- * @brief The function is used to send a command to HD44780. 
- * The supported commands are defined in this header file.
- * 
- * @param[in] pHD44780 pointer to the structur that represent HD44780
- * @param[in] Command2Send HD44780 command.
- */
-void LCDSendCommand4(const TSHD44780 *pHD44780, uint8_t Command2Send);
-
-/**
- * @brief Display a character on the LCD at the current cursor position.
+ * @brief Sends data to HD44780 controller with 4-bit data interface.
  *  
- * @param[in] pHD44780 pointer to the structur that represent HD44780
- * @param[in] Character2Show A character to be desplayed.
- * 
- * @return void.
+ * @param[in] pHD44780 pointer to the data structure which represents the interface to the LCD 
+ * @param[in] data_type describes the meaning of the data: instruction or a charachter to be displayed on the LCD  
+ * @param[in] data_type the actual data for sending to the LCD
  */
-void LCDShowCharacter4(const TSHD44780 *pHD44780, char Character2Show);
+extern void LCDSendData4(const TSHD44780 *pHD44780, enum HD4478_DATA_TYPE data_type, uint8_t data);
 
 /**
  * @brief Display a string on the LCD starting from the current cursor 

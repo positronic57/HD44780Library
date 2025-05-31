@@ -8,7 +8,9 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License.
  *
- * Example of using HD44780 library on Atmega32.The CPU freq is 4MHz defined with F_CPU. 
+ * Example of using HD44780 library on Atmega32. The CPU freq is 16MHz 
+ * defined with F_CPU.
+ * 
  * JHD 162A 16x2 LCD module is used for the test.
  * 
  * Connection between MCU and LCD:
@@ -23,7 +25,7 @@
  */ 
 
 #ifndef F_CPU
-#define F_CPU 4000000UL
+#define F_CPU 16000000UL
 #endif
 
 #include <avr/io.h>
@@ -35,7 +37,8 @@
 int main(void)
 {
     
-	//Define custom special characters. In this example those are Cyrillic letters: sh and d.
+	// Define custom special characters. 
+        // In this example those are the letters from the Macedonian alphabet for "d" and "sh".
 	uint8_t specCharMatrix[2][8]={ 
 		{ 0x15, 0x15, 0x15, 0x15, 0x15, 0x15, 0x1F, 0x00 },
 		{ 0x0E, 0x0A, 0x0A, 0x0A, 0x0A, 0x1F, 0x11, 0x00 }
@@ -54,15 +57,15 @@ int main(void)
 		as argument of the init function. If that is not the case use 
 		SINGLE_LINE_DISPLAY during the init process.
 
-	*/	
+	*/
 	LCDInit4(&HD44780Display, &PORTD, &PORTB, PD4, PD7, PD6, TWO_LINES_DISPLAY);
 	LCDDefineSpecialChars4(&HD44780Display, specCharMatrix, 2);
 	
-	LCDSendCommand4(&HD44780Display, DISPLAY_ON); 
+	LCDSendData4(&HD44780Display, DATA_TYPE_INSTRUCTION, DISPLAY_ON); 
 
 	LCDShowString4(&HD44780Display, "libHD44780");
-	LCDSendCommand4(&HD44780Display, LCD16x2_SELECT_LINE_2);
-	LCDShowString4(&HD44780Display, "Tester!!!");
+	LCDSendData4(&HD44780Display, DATA_TYPE_INSTRUCTION, LCD16x2_SELECT_LINE_2);
+	LCDShowString4(&HD44780Display, "Tester-v1.2.0!");
 	
 	/*
 		To manually set the cursor position in case of single line LCD,
@@ -72,14 +75,14 @@ int main(void)
 		LCD16x1_SELECT_DDRAM_2ND_HALF 
 	*/
 	LCDSetCursorPosition4(&HD44780Display, LCD16x2_SELECT_LINE_1, 12);
-	LCDSendCommand4(&HD44780Display, CURSOR_ON);
-	LCDSendCommand4(&HD44780Display, BLINKING_CURSOR_ON); 
+	LCDSendData4(&HD44780Display, DATA_TYPE_INSTRUCTION, CURSOR_ON);
+	LCDSendData4(&HD44780Display, DATA_TYPE_INSTRUCTION, BLINKING_CURSOR_ON); 
 	
 	//Show the data from the CGRAM
-	LCDShowCharacter4(&HD44780Display, 0x00);
-	LCDShowCharacter4(&HD44780Display, 0x01);
+	LCDSendData4(&HD44780Display, DATA_TYPE_DATA, 0x00);
+	LCDSendData4(&HD44780Display, DATA_TYPE_DATA, 0x01);
 	
 	while(1) {
-      _delay_us(100);
+      	   _delay_us(100);
  	}
 }

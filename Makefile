@@ -12,7 +12,7 @@ endif
 
 #CPU frequency
 ifndef cpu_freq
-        CPU_FREQ = 4000000L
+        CPU_FREQ = 16000000L
 else
         CPU_FREQ = $(cpu_freq)
 endif
@@ -53,16 +53,16 @@ $(LIBRARY_NAME).a: $(OBJECTS)
 
 #Install the library
 install: $(LIBRARY_NAME).a
-	if [ ! -d $(PREFIX)/lib/avr8/$(MCU) ]; then mkdir -p $(PREFIX)/lib/avr8/$(MCU); fi
-	if [ ! -d $(PREFIX)/include/avr8 ]; then mkdir -p $(PREFIX)/include/avr8; fi
-	install -m 0644 $(LIBRARY_NAME).a $(PREFIX)/lib/avr8/$(MCU)
-	install -m 0644 $(HEADER) $(PREFIX)/include/avr8
+	if [ ! -d $(PREFIX)/lib/avr/$(MCU) ]; then mkdir -p $(PREFIX)/lib/avr/$(MCU); fi
+	if [ ! -d $(PREFIX)/include/avr ]; then mkdir -p $(PREFIX)/include/avr; fi
+	install -m 0644 $(LIBRARY_NAME).a $(PREFIX)/lib/avr/$(MCU)
+	install -m 0644 $(HEADER) $(PREFIX)/include/avr
 
 #Uninstall the library	
 .PHONY: uninstall
 uninstall:
-	rm $(PREFIX)/lib/avr8/$(MCU)/$(LIBRARY_NAME).a
-	rm $(PREFIX)/include/avr8/$(HEADER)
+	rm $(PREFIX)/lib/avr/$(MCU)/$(LIBRARY_NAME).a
+	rm $(PREFIX)/include/avr/$(HEADER)
 
 .PHONY: clean
 clean:

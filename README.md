@@ -2,14 +2,16 @@
 
 #### Short Description
 
-HD44780library is a C library for sending commands and data to LCD with HD44780 display controller for Microchip AVR 8-bit microcontrollers. The library does not offer any high level of abstraction or methods for displaying content on LCD modules. It only povides low level calls for communication
+HD44780library is a C library for sending commands and data to LCD with HD44780 display controller from Microchip AVR 8-bit microcontrollers. The library does not offer any high level of abstraction or methods for displaying content on LCD modules. It only provides low level calls for communication
 with the LCD module. Any additional abstraction level can be build on top of it.
 
-The library implements 4-bit data bus for communication with the HD44780 LCD controller. 
-The communication is done in one direction only, from the microcontroller towards HD44780.
-The library can only write data to HD44780. The value of R/W pin is all the time set to 0 by the library. 
-Busy Flag checks are replaced by time delay functions.
-
+The library supports only 4-bit data bus for communication with the HD44780 LCD controller. The code expects that all lines of the data bus (data lines D4..7 on HD44780 controller) are connected to the lower nibble of one of the AVR MCU ports.
+For example: selecting AVR MCU PORTB for the data lines, the code will use PB0..3 for the data lines D4..D7.
+The signaling lines: R/W, E and RS are expected to be pins on one AVR MCU port, and can be any pins of that port. For example: PC1, PC5, PC6.
+ 
+The communication is done in one direction only, from the microcontroller towards HD44780. The library can only write data to HD44780. The value of R/W pin is all the time set to 0 by the library. The pulses on E signal line required for driving the transfer on the data lines are software generated using a time delay function.
+  
+HD44780 controller provides a Busy Flag (D7) for signaling the MCU that the processing of the last instruction is not done and all further data on the data lines will be ignored. The next data transfer will be accepted only when the Busy Flag is set back to 0. The library does not checks this flag. Instead, it uses a time delay functions between data transfers. 
 
 #### Supported MCU Hardware
 
@@ -35,13 +37,34 @@ Implemented HD44780 features:
  - send HD44780 commands;
  - define custom special characters.
 
-#### Doc
-
-Doxygen generated documentation is available in the  doc folder.
 
 #### Usage
 
-The code comes with Makefile for building a static library using the make tool. The library can be linked to projects where needed. Other option is to copy the header and the source files direclty in the source tree of the target project.  
+The easiest way to use the code is to copy the header and the source files directly in the source tree of the target project. The other option is to use one of the provided Make or CMake files for building a static library which later can be linked with other projects where needed. 
+##### Building a static library with CMake on Linux
+
+The library comes with CMake tool chain files for AVR GCC compiler and Microchip XC8 compiler. The compiler can be selected with -DCMAKE_TOOLCHAIN_FILE cmake argument.  
+1. Create a build folder within the project folder:
+
+	\>mkdir build && cd build
+
+2. Create all the files required for building the project with "make" tool:
+
+	\>cmake -DCMAKE_TOOLCHAIN_FILE=../avr_gcc_toolchain.cmake -DMCU=atmega32 -DCPU_FREQ=16000000L ..
+
+where: the "-DMCU" defines the target AVR MCU model, "-DCPU_FREQ" is the MCU clock frequency.
+
+3. Build the code:
+
+	\>make
+
+4. Install the archive file and the header.
+
+	\>make install
+
+The default installation folder for the library is: ${HOME}/avr/lib/<MCU_model>/, and the header file will end up in:
+${HOME}/avr/include.
+To change the default installation folder use -DCMAKE_INSATLL_PREFIX=your_path_here.
 
 #### Test Hardware
 

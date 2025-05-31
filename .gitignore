@@ -11,3 +11,6 @@ doxyfile_HD44780library
 .settings/
 build/
 .vscode/
+**/*.user
+example/CMakeLists.txt
+
