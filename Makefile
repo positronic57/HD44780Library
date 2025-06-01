@@ -17,6 +17,13 @@ else
         CPU_FREQ = $(cpu_freq)
 endif
 
+#Prefix for the installation folder of the library
+ifdef prefix
+	PREFIX = $(prefix)
+else
+	PREFIX = ${HOME}/avr
+endif
+
 #Source files
 SOURCES += HD44780.c
 
@@ -25,9 +32,6 @@ OBJECTS += $(SOURCES:.c=.o)
 
 #Library header file
 HEADER += HD44780.h
-
-#Library installation folder
-PREFIX = /usr/local
 
 #Define C compiler flags
 override CFLAGS = -Wall -Os -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -std=gnu99 -funsigned-char -funsigned-bitfields -mmcu=$(MCU) -DF_CPU=$(CPU_FREQ)
@@ -50,19 +54,20 @@ $(OBJECTS): $(SOURCES)
 $(LIBRARY_NAME).a: $(OBJECTS)
 	@echo Building target file: $@. 
 	avr-ar $(ARAGS) $@ $^
+	@echo $(PREFIX)
 
 #Install the library
 install: $(LIBRARY_NAME).a
-	if [ ! -d $(PREFIX)/lib/avr/$(MCU) ]; then mkdir -p $(PREFIX)/lib/avr/$(MCU); fi
-	if [ ! -d $(PREFIX)/include/avr ]; then mkdir -p $(PREFIX)/include/avr; fi
-	install -m 0644 $(LIBRARY_NAME).a $(PREFIX)/lib/avr/$(MCU)
-	install -m 0644 $(HEADER) $(PREFIX)/include/avr
+	if [ ! -d $(PREFIX)/lib/$(MCU) ]; then mkdir -p $(PREFIX)/lib/$(MCU); fi
+	if [ ! -d $(PREFIX)/include ]; then mkdir -p $(PREFIX)/include; fi
+	install -m 0644 $(LIBRARY_NAME).a $(PREFIX)/lib/$(MCU)
+	install -m 0644 $(HEADER) $(PREFIX)/include
 
 #Uninstall the library	
 .PHONY: uninstall
 uninstall:
-	rm $(PREFIX)/lib/avr/$(MCU)/$(LIBRARY_NAME).a
-	rm $(PREFIX)/include/avr/$(HEADER)
+	rm $(PREFIX)/lib/$(MCU)/$(LIBRARY_NAME).a
+	rm $(PREFIX)/include/$(HEADER)
 
 .PHONY: clean
 clean:

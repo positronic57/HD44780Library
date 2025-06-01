@@ -40,31 +40,7 @@ Implemented HD44780 features:
 
 #### Usage
 
-The easiest way to use the code is to copy the header and the source files directly in the source tree of the target project. The other option is to use one of the provided Make or CMake files for building a static library which later can be linked with other projects where needed. 
-##### Building a static library with CMake on Linux
-
-The library comes with CMake tool chain files for AVR GCC compiler and Microchip XC8 compiler. The compiler can be selected with -DCMAKE_TOOLCHAIN_FILE cmake argument.  
-1. Create a build folder within the project folder:
-
-	\>mkdir build && cd build
-
-2. Create all the files required for building the project with "make" tool:
-
-	\>cmake -DCMAKE_TOOLCHAIN_FILE=../avr_gcc_toolchain.cmake -DMCU=atmega32 -DCPU_FREQ=16000000L ..
-
-where: the "-DMCU" defines the target AVR MCU model, "-DCPU_FREQ" is the MCU clock frequency.
-
-3. Build the code:
-
-	\>make
-
-4. Install the archive file and the header.
-
-	\>make install
-
-The default installation folder for the library is: ${HOME}/avr/lib/<MCU_model>/, and the header file will end up in:
-${HOME}/avr/include.
-To change the default installation folder use -DCMAKE_INSATLL_PREFIX=your_path_here.
+The easiest way to use the code is to copy the header and the source files directly in the source tree of the target project. The other option is to create a static library which later can be linked with other projects where needed. INSTALL file is a short HOWTO for building and installing the code as a static library. 
 
 #### Test Hardware
 

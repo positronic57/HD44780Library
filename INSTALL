@@ -2,47 +2,74 @@ HD44780library Installation Manual
 
 
 This short HOWTO describes the installation procedure for HD44780library on Linux
-with help of Make, avr-libc and avr-gcc compiler.
+with help of Make, CMake and avr-gcc. Microchip XC8 compiler is an option when the
+build is done using CMake.
+
 For other platforms and building tools, check the documentation of those tools how to create
 a static libraries.
 
 Prerequisites:
-- GNU binutils and GNU gcc compiler built for AVR targets;
-- AVR-libc.
+- GNU binutils and GNU gcc compiler for AVR targets;
+- AVR-libc;
+- Make/CMake tools;
+- Microchip XC8 compiler (optional, for CMake build).
 
 
-Installation
+
+I Installation using Make tool
 
 1. Navigate to the library folder.
-2. Build the library with:
 
-  #make [mcu=<device_name>|cpu_freq=<frequency>]
+2. Build the static library with:
 
-Calling make with no arguments, results with buld for Atmega32 MCU and CPU frequency of 4MHz.
-Use the command line arguments from above for setting the required mcu and cpu_freq values.
-For exmple:
+  >make [mcu=<device_name> | cpu_freq=<frequency>]
 
-  #make mcu=atmega16 cpu_freq=8000000L
+Calling "make" with no arguments, results with build for Atmega32 MCU and CPU frequency of 16MHz.
+Use the command line arguments from above for setting the required MCU and CPU freq values.
+For example:
 
-3. Install the library by executing:
+  >make mcu=atmega16 cpu_freq=8000000L
 
-  #sudo make install
+This will build a static library file libHD44789.a in the folder where "make" was executed.
 
-The destination folder for the library file is defined by the Makefile variable $PREFIX and the MCU name.
-By default, the library is installed in:
+3. Install a copy of the static library
 
-  /usr/local/lib/avr8/$MCU
+The default installation prefix is “${HOME}/avr”. The library file will be placed in "lib/$(mcu)/"
+relative to the prefix location, while the header file will end up in "include/" under the prefix.
+To change the default installation prefix, call "install" target with "prefix" argument:
 
-or
-  /usr/local/lib/avr8/amega32
-
-The library header file will land in:
-
-  /usr/local/include/avr8
-
+  >make mcu=atmega16 prefix="some_path" install
 
 
 Uninstalling the Library
 
-  #sudo make uninstall
+  >make uninstall
 
+
+II Installation with the help of CMake tool
+
+Two tool chain configuration files are available for cross-compiling with CMake: one for avr-gcc and
+the second for Microchip XC8 compiler. One of them must be specified when calling cmake by providing
+the argument CMAKE_TOOLCHAIN_FILE.
+
+Variables used for building the library:
+- MCU as the name of the device (default value is "atmega32")
+- CPU_FREQ defines the CPU frequency (default value is "16000000L")
+- CMAKE_INSTALL_PREFIX (optional). Defines the prefix for the installation folder ("${HOME}/avr" as default).
+  The library file will end up in [installation prefix]/lib/${MCU} and the header file in [installation_prefix]/include.
+
+1. Create "build" subfolder in the source folder of the library:
+
+  >mkdir build && cd build
+
+2. Call "cmake" with arguments that match the target AVR microcontroller:
+
+  >cmake -DCMAKE_TOOLCHAIN_FILE=../avr_gcc_toolchain.cmake -DMCU=atmega32 -DCPU_FREQ=16000000L ..
+
+3. The step 2 will create make configuration files required for building the library. Compile the code with:
+
+  >make
+
+4. Install the library with:
+
+  >make install
